@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday Miss Anisha Mallick!</title>
+  <!-- Google Fonts: Inter, Outfit, and Caveat (Cursive) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome Icons for modern UI symbols -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Canvas Confetti Library via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            cursive: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Core Styles and Animations -->
+  <style>
+    /* Prevent default touch scrolls on iOS but allow overflow-y where needed */
+    body {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #0f172a;
+    }
+
+    /* Custom Screen transitions (native-app style) */
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+      transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .active-screen {
+      transform: scale(1);
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .exit-screen {
+      transform: scale(1.08);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hidden-screen {
+      display: none !important;
+    }
+
+    /* Screen 1: Particle Animation */
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(105vh) translateX(var(--drift)) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+
+    .falling-particle {
+      position: absolute;
+      top: -50px;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    /* Screen 2: Flame Flicker Animation */
+    @keyframes flicker {
+
+      0%,
+      100% {
+        transform: scale(1) rotate(-2deg);
+        filter: drop-shadow(0 0 6px #f59e0b) drop-shadow(0 0 15px #ef4444);
+      }
+
+      50% {
+        transform: scale(1.15) rotate(3deg) translateY(-2px);
+        filter: drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 20px #f97316);
+      }
+    }
+
+    .flame {
+      animation: flicker 0.5s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+
+    /* Smoke Puff Animation */
+    @keyframes smoke {
+      0% {
+        transform: scale(0.4) translateY(0);
+        opacity: 0.8;
+        filter: blur(1px);
+      }
+
+      100% {
+        transform: scale(2.2) translateY(-50px);
+        opacity: 0;
+        filter: blur(5px);
+      }
+    }
+
+    .smoke-puff {
+      animation: smoke 0.9s ease-out forwards;
+    }
+
+    /* Screen 3: Polaroid Card Stack Styling */
+    .polaroid-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: bottom center;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s, z-index 0.6s;
+    }
+
+    /* Screen 4: Gift Box Shake Animation */
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      15% {
+        transform: rotate(-8deg) scale(1.05);
+      }
+
+      30% {
+        transform: rotate(6deg) scale(1.05);
+      }
+
+      45% {
+        transform: rotate(-6deg) scale(1.05);
+      }
+
+      60% {
+        transform: rotate(4deg) scale(1.05);
+      }
+
+      75% {
+        transform: rotate(-3deg) scale(1.05);
+      }
+    }
+
+    .shake-box {
+      animation: shake 0.6s ease-in-out;
+    }
+
+    /* Glowing custom shadows */
+    .glow-gold {
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .glow-pink {
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+    }
+
+    /* Glassmorphic panels */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Floating background stickers keyframes and styling */
+    @keyframes float-slow {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(8deg);
+      }
+    }
+
+    @keyframes float-slower {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(-6deg);
+      }
+    }
+
+    .bg-sticker {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0.08;
+      z-index: 0;
+    }
+
+    /* Responsive layout scaling for small viewport heights and mobile screens */
+    @media (max-height: 740px),
+    (max-width: 400px) {
+      .screen {
+        padding: 1rem !important;
+      }
+
+      #polaroid-deck {
+        width: 240px !important;
+        height: 290px !important;
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+
+      #memory-caption-box {
+        min-height: 80px !important;
+        padding: 0.75rem !important;
+      }
+
+      #go-to-gifts {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+      }
+
+      #screen-4 .grid {
+        max-width: 280px !important;
+        gap: 0.5rem !important;
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+
+      #final-modal-card {
+        padding: 1.25rem !important;
+      }
+
+      #final-modal-card .space-y-6>*+* {
+        margin-top: 0.5rem !important;
+      }
+
+      #final-modal-card .space-y-2>*+* {
+        margin-top: 0.15rem !important;
+      }
+
+      #final-modal-card .p-4 {
+        padding: 0.75rem !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 font-sans p-0 sm:p-4">
+
+  <!-- Background Music Audio Element -->
+  <audio id="bg-music" loop>
+    <source src="assets/birthday-song.mp3" type="audio/mpeg">
+    <source src="https://raw.githubusercontent.com/jc-kirthi/HBD/master/happy-birthday.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Mobile View Container -->
+  <div
+    class="relative w-full max-w-md h-[100dvh] sm:h-[840px] sm:rounded-[36px] overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] border border-purple-950 bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950 text-white select-none flex flex-col justify-between">
+
+    <!-- Subtle Ambient Glows -->
+    <div
+      class="absolute top-[-20%] left-[-20%] w-[80%] h-[50%] rounded-full bg-pink-500/10 blur-[80px] pointer-events-none">
+    </div>
+    <div
+      class="absolute bottom-[-10%] right-[-20%] w-[80%] h-[50%] rounded-full bg-violet-600/10 blur-[80px] pointer-events-none">
+    </div>
+
+    <!-- Decorative Background Watermark Emojis -->
+    <div class="bg-sticker text-6xl top-10 left-6 animate-[float-slow_8s_ease-in-out_infinite]">🎈</div>
+    <div class="bg-sticker text-5xl top-28 right-8 animate-[float-slower_10s_ease-in-out_infinite]">✨</div>
+    <div class="bg-sticker text-7xl bottom-36 left-8 animate-[float-slower_9s_ease-in-out_infinite]">🎂</div>
+    <div class="bg-sticker text-6xl bottom-16 right-6 animate-[float-slow_7s_ease-in-out_infinite]">🎁</div>
+    <div class="bg-sticker text-4xl top-1/2 left-4 animate-[float-slow_11s_ease-in-out_infinite]">💖</div>
+    <div class="bg-sticker text-4xl top-[65%] right-4 animate-[float-slower_8s_ease-in-out_infinite]">🌸</div>
+    <div class="bg-sticker text-5xl top-12 right-[40%] animate-[float-slow_12s_ease-in-out_infinite]">👑</div>
+
+
+    <!-- ============================================ -->
+    <!-- SCREEN 1: THE GRAND ENTRANCE                -->
+    <!-- ============================================ -->
+    <div id="screen-1"
+      class="screen active-screen bg-gradient-to-b from-purple-950 via-slate-900 to-indigo-950 justify-center gap-8 cursor-pointer">
+      <!-- Full screen particle emitter -->
+      <div id="particles-container" class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"></div>
+
+      <div class="text-center z-10 px-4 space-y-6 animate-pulse-slow">
+        <p id="render-intro-subtitle"
+          class="text-xs uppercase tracking-[0.25em] text-pink-400 font-bold font-heading drop-shadow-md">A Special
+          Journey For</p>
+
+        <div class="space-y-2">
+          <h1 id="render-intro-title"
+            class="text-5xl font-extrabold tracking-tight font-heading leading-tight bg-clip-text text-transparent bg-gradient-to-br from-amber-200 via-pink-400 to-violet-400 drop-shadow-lg">
+            Happy Birthday
+          </h1>
+          <h2 id="render-intro-name"
+            class="text-4xl font-extrabold font-cursive tracking-wide text-white drop-shadow-[0_2px_10px_rgba(236,72,153,0.5)] mt-1">
+            Anisha Mallick
+          </h2>
+        </div>
+
+        <p id="render-intro-desc" class="text-sm text-slate-300 font-light max-w-[280px] mx-auto leading-relaxed">
+          Step into a little world designed just for you. Tap anywhere to enter.
+        </p>
+      </div>
+
+      <!-- Animated Progress Bar at the Bottom -->
+      <div class="absolute bottom-12 left-8 right-8 z-10 space-y-2">
+        <div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+          <div id="intro-progress"
+            class="bg-gradient-to-r from-pink-500 via-purple-500 to-amber-400 h-full w-0 transition-all ease-linear">
+          </div>
+        </div>
+        <p class="text-[10px] text-center text-slate-400 tracking-wider">Loading magical moments...</p>
+      </div>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- SCREEN 2: THE CAKE & CANDLES                -->
+    <!-- ============================================ -->
+    <div id="screen-2" class="screen hidden-screen justify-between items-center text-center py-10">
+
+      <!-- Top Section -->
+      <div class="space-y-2 z-10">
+        <span
+          class="inline-block px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-xs font-semibold text-pink-400 tracking-wider uppercase">Make
+          a Wish</span>
+        <h2 class="text-3xl font-extrabold font-heading text-white">Make Your Wish!</h2>
+        <p class="text-sm text-slate-300 max-w-[280px] mx-auto leading-relaxed">
+          Tap each of the <span class="text-amber-400 font-semibold">three</span> candles to blow out the flames and
+          enter your gallery.
+        </p>
+      </div>
+
+      <!-- Centered Birthday Cake SVG + Interactive Candles -->
+      <div class="relative w-80 h-72 flex items-center justify-center my-auto">
+        <!-- SVG Cake Illustration -->
+        <svg class="w-full h-full drop-shadow-[0_15px_20px_rgba(0,0,0,0.5)]" viewBox="0 0 300 260" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <!-- Stand -->
+          <path d="M50 220 H250 L230 240 H70 Z" fill="#cbd5e1" opacity="0.9" />
+          <path d="M90 240 H210 L195 255 H105 Z" fill="#94a3b8" />
+          <rect x="142" y="220" width="16" height="20" fill="#64748b" />
+
+          <!-- Cake Tier 1 (Bottom) - Elegant Purple-Indigo Theme -->
+          <rect x="40" y="150" width="220" height="70" rx="14" fill="url(#tier1Grad)" />
+          <!-- Cream swirls bottom -->
+          <path
+            d="M40 165 C60 175, 80 175, 100 165 C120 175, 140 175, 160 165 C180 175, 200 175, 220 165 C240 175, 250 175, 260 165 V175 C250 185, 240 185, 220 175 C200 185, 180 185, 160 175 C140 185, 120 185, 100 175 C80 185, 60 185, 40 175 Z"
+            fill="#c084fc" opacity="0.4" />
+
+          <!-- Cake Tier 2 (Middle) - Rich Pink Theme -->
+          <rect x="60" y="95" width="180" height="55" rx="10" fill="url(#tier2Grad)" />
+          <!-- Cream Drops (Icing) -->
+          <path
+            d="M60 105 Q71 120 82 105 Q93 120 104 105 Q115 120 126 105 Q137 120 148 105 Q159 120 170 105 Q181 120 192 105 Q203 120 214 105 Q225 120 236 105 Q240 115 240 120 V115 Q225 130 214 115 Q203 130 192 115 Q181 130 170 115 Q159 130 148 115 Q137 130 126 115 Q115 130 104 115 Q93 130 82 115 Q71 130 60 115 Z"
+            fill="#fbcfe8" />
+
+          <!-- Cake Tier 3 (Top) - Amber Gold Theme -->
+          <rect x="85" y="55" width="130" height="40" rx="8" fill="url(#tier3Grad)" />
+
+          <!-- Decorative Toppings -->
+          <circle cx="100" cy="55" r="5" fill="#f43f5e" />
+          <circle cx="125" cy="55" r="5" fill="#a855f7" />
+          <circle cx="150" cy="55" r="5" fill="#3b82f6" />
+          <circle cx="175" cy="55" r="5" fill="#10b981" />
+          <circle cx="200" cy="55" r="5" fill="#eab308" />
+
+          <!-- Sprinkles Details -->
+          <g opacity="0.65">
+            <!-- Tier 1 Sprinkles -->
+            <rect x="65" y="185" width="8" height="3" rx="1" fill="#f59e0b" transform="rotate(25, 65, 185)" />
+            <rect x="110" y="195" width="8" height="3" rx="1" fill="#ec4899" transform="rotate(-35, 110, 195)" />
+            <rect x="160" y="180" width="8" height="3" rx="1" fill="#10b981" transform="rotate(45, 160, 180)" />
+            <rect x="210" y="195" width="8" height="3" rx="1" fill="#3b82f6" transform="rotate(-15, 210, 195)" />
+            <!-- Tier 2 Sprinkles -->
+            <rect x="90" y="125" width="6" height="2.5" rx="0.8" fill="#ffffff" transform="rotate(10, 90, 125)" />
+            <rect x="150" y="130" width="6" height="2.5" rx="0.8" fill="#eab308" transform="rotate(-40, 150, 130)" />
+            <rect x="200" y="120" width="6" height="2.5" rx="0.8" fill="#c084fc" transform="rotate(30, 200, 120)" />
+          </g>
+
+          <defs>
+            <linearGradient id="tier1Grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4c1d95" />
+              <stop offset="100%" stop-color="#1e1b4b" />
+            </linearGradient>
+            <linearGradient id="tier2Grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#db2777" />
+              <stop offset="100%" stop-color="#831843" />
+            </linearGradient>
+            <linearGradient id="tier3Grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#eab308" />
+              <stop offset="100%" stop-color="#854d0e" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <!-- HTML Interactive Candle 1 (Left) -->
+        <div class="candle absolute cursor-pointer flex flex-col items-center" style="top: -2px; left: 105px;"
+          data-id="1">
+          <div class="flame-wrapper relative">
+            <div
+              class="flame w-4 h-6 bg-gradient-to-t from-red-500 via-amber-400 to-amber-200 rounded-[50%_50%_20%_20%] shadow-[0_0_12px_#f59e0b] origin-bottom duration-300">
+            </div>
+            <div class="absolute inset-0 bg-yellow-300 rounded-full filter blur-md opacity-25 animate-pulse"></div>
+          </div>
+          <div class="w-[2px] h-2 bg-slate-700"></div>
+          <div
+            class="w-3 h-12 bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-400 rounded-t-sm relative overflow-hidden">
+            <div
+              class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.4)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.4)_50%,rgba(255,255,255,0.4)_75%,transparent_75%,transparent)] bg-[size:6px_6px]">
+            </div>
+          </div>
+        </div>
+
+        <!-- HTML Interactive Candle 2 (Center) -->
+        <div class="candle absolute cursor-pointer flex flex-col items-center" style="top: -12px; left: 144px;"
+          data-id="2">
+          <div class="flame-wrapper relative">
+            <div
+              class="flame w-4 h-6 bg-gradient-to-t from-red-500 via-amber-400 to-amber-200 rounded-[50%_50%_20%_20%] shadow-[0_0_12px_#f59e0b] origin-bottom duration-300">
+            </div>
+            <div class="absolute inset-0 bg-yellow-300 rounded-full filter blur-md opacity-25 animate-pulse"></div>
+          </div>
+          <div class="w-[2px] h-2 bg-slate-700"></div>
+          <div
+            class="w-3 h-12 bg-gradient-to-r from-pink-400 via-rose-300 to-pink-400 rounded-t-sm relative overflow-hidden">
+            <div
+              class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.4)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.4)_50%,rgba(255,255,255,0.4)_75%,transparent_75%,transparent)] bg-[size:6px_6px]">
+            </div>
+          </div>
+        </div>
+
+        <!-- HTML Interactive Candle 3 (Right) -->
+        <div class="candle absolute cursor-pointer flex flex-col items-center" style="top: -2px; left: 183px;"
+          data-id="3">
+          <div class="flame-wrapper relative">
+            <div
+              class="flame w-4 h-6 bg-gradient-to-t from-red-500 via-amber-400 to-amber-200 rounded-[50%_50%_20%_20%] shadow-[0_0_12px_#f59e0b] origin-bottom duration-300">
+            </div>
+            <div class="absolute inset-0 bg-yellow-300 rounded-full filter blur-md opacity-25 animate-pulse"></div>
+          </div>
+          <div class="w-[2px] h-2 bg-slate-700"></div>
+          <div
+            class="w-3 h-12 bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-400 rounded-t-sm relative overflow-hidden">
+            <div
+              class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.4)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.4)_50%,rgba(255,255,255,0.4)_75%,transparent_75%,transparent)] bg-[size:6px_6px]">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Status -->
+      <div id="candle-status" class="text-xs text-pink-400 font-semibold tracking-widest uppercase py-4">
+        Waiting for your wish...
+      </div>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- SCREEN 3: THE MEMORIES                      -->
+    <!-- ============================================ -->
+    <div id="screen-3" class="screen hidden-screen justify-between py-6 items-center px-4 sm:px-6">
+
+      <!-- Sunflower Background Decorative Emojis -->
+      <div
+        class="absolute top-[18%] left-[8%] text-6xl opacity-20 pointer-events-none select-none animate-[float-slow_9s_ease-in-out_infinite] z-0">
+        🌻</div>
+      <div
+        class="absolute top-[26%] right-[6%] text-5xl opacity-15 pointer-events-none select-none animate-[float-slower_11s_ease-in-out_infinite] z-0">
+        🌻</div>
+      <div
+        class="absolute bottom-[28%] left-[10%] text-5xl opacity-15 pointer-events-none select-none animate-[float-slower_10s_ease-in-out_infinite] z-0">
+        🌻</div>
+      <div
+        class="absolute bottom-[22%] right-[8%] text-6xl opacity-20 pointer-events-none select-none animate-[float-slow_8s_ease-in-out_infinite] z-0">
+        🌻</div>
+
+      <!-- Top Title -->
+      <div class="text-center space-y-1 w-full flex-none z-10">
+        <h2 id="render-memories-title"
+          class="text-2xl sm:text-3xl font-black font-heading tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-amber-300">
+          Your Special Moments
+        </h2>
+        <p class="text-xs text-slate-400">Tap the deck to cycle through memories</p>
+      </div>
+
+      <!-- Polaroid Memory Card Deck Wrapper -->
+      <div id="polaroid-deck"
+        class="relative w-[260px] h-[320px] sm:w-[280px] sm:h-[350px] my-6 flex items-center justify-center flex-grow z-10">
+        <!-- Generated dynamically via JavaScript from database -->
+      </div>
+
+      <!-- Captions Display Area -->
+      <div id="memory-caption-box"
+        class="glass-panel w-full p-4 rounded-2xl text-center space-y-1 min-h-[90px] sm:min-h-[100px] flex flex-col justify-center transition-all duration-300 flex-none z-10">
+        <h4 id="memory-speaker" class="text-xs uppercase tracking-widest text-pink-400 font-bold font-heading">For
+          Anisha</h4>
+        <p id="memory-caption"
+          class="text-xs sm:text-sm text-slate-200 leading-relaxed font-light transition-opacity duration-300">
+          To the girl who fills every day with laughter and sparkle. Thank you for being my constant source of joy!
+        </p>
+      </div>
+
+      <!-- Action Button (Space Filler on Mobile, Fixed container handles overlays) -->
+      <div class="w-full pt-4 flex-none z-10">
+        <button id="go-to-gifts"
+          class="w-full py-3.5 sm:py-4 bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 rounded-2xl font-bold tracking-wider text-xs sm:text-sm shadow-xl active:scale-95 duration-200 animate-pulse glow-pink">
+          SEE YOUR GIFTS <i class="fa-solid fa-gift ml-2"></i>
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- SCREEN 4: THE GIFT GAME                     -->
+    <!-- ============================================ -->
+    <div id="screen-4" class="screen hidden-screen justify-between py-6 items-center px-4 sm:px-6">
+
+      <!-- Top Title -->
+      <div class="text-center space-y-1 w-full z-10 flex-none">
+        <span
+          class="inline-block px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-semibold text-amber-400 tracking-widest uppercase">The
+          Surprise Game</span>
+        <h2 class="text-2xl sm:text-3xl font-black font-heading text-white">Unwrap Your Gifts</h2>
+        <p class="text-xs text-slate-400">
+          Pick exactly <span id="gifts-left" class="text-amber-400 font-bold">3</span> boxes to reveal your virtual
+          birthday gifts!
+        </p>
+      </div>
+
+      <!-- 3x3 Gift Box Grid -->
+      <div
+        class="grid grid-cols-3 gap-2.5 sm:gap-3 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[340px] my-6 relative z-10 flex-grow items-center justify-center">
+
+        <!-- Box 1 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="1">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-indigo-800 to-purple-900 border border-purple-700/50 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-amber-400"></div>
+            <div class="absolute h-1.5 w-full bg-amber-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-amber-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-star text-amber-300/30 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-amber-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-amber-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 2 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="2">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-purple-800 to-pink-900 border border-pink-700/50 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-amber-400"></div>
+            <div class="absolute h-1.5 w-full bg-amber-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-amber-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-heart text-pink-300/30 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-amber-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-amber-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 3 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="3">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 border border-indigo-700/50 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-amber-400"></div>
+            <div class="absolute h-1.5 w-full bg-amber-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-amber-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-cake-candles text-amber-300/30 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-amber-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-amber-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 4 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="4">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-indigo-850 to-pink-950 border border-pink-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-pink-400"></div>
+            <div class="absolute h-1.5 w-full bg-pink-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-pink-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-gift text-pink-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-pink-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-pink-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 5 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="5">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-pink-850 to-purple-950 border border-purple-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-pink-400"></div>
+            <div class="absolute h-1.5 w-full bg-pink-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-pink-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-sparkles text-pink-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-pink-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-pink-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 6 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="6">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-violet-850 to-indigo-950 border border-indigo-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-pink-400"></div>
+            <div class="absolute h-1.5 w-full bg-pink-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-pink-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-wand-magic-sparkles text-pink-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-pink-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-pink-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 7 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="7">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-cyan-900 to-indigo-950 border border-teal-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-teal-400"></div>
+            <div class="absolute h-1.5 w-full bg-teal-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-teal-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-moon text-teal-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-teal-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-teal-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 8 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="8">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-emerald-900 to-slate-950 border border-emerald-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-teal-400"></div>
+            <div class="absolute h-1.5 w-full bg-teal-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-teal-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-gem text-teal-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-teal-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-teal-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 9 -->
+        <div class="gift-box-container relative aspect-square w-full" data-index="9">
+          <div
+            class="gift-box absolute inset-0 bg-gradient-to-br from-slate-900 to-purple-950 border border-fuchsia-900/40 rounded-2xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 duration-200">
+            <div class="absolute w-1.5 h-full bg-teal-400"></div>
+            <div class="absolute h-1.5 w-full bg-teal-400"></div>
+            <div class="absolute w-7 h-7 rounded-full border-4 border-teal-400 -top-1 bg-transparent"></div>
+            <i class="fa-solid fa-crown text-teal-300/35 text-xl z-10"></i>
+          </div>
+          <div
+            class="gift-revealed absolute inset-0 rounded-2xl overflow-hidden scale-0 opacity-0 transition-all duration-500 flex flex-col justify-end bg-slate-900 border-2 border-teal-400 cursor-pointer">
+            <img src="" class="w-full h-full object-cover" alt="Revealed Gift">
+            <div
+              class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-1.5 text-center">
+              <span class="gift-title text-[9px] font-bold text-teal-300 block truncate">Gift</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Back of Screen info -->
+      <div class="w-full text-center py-2 relative z-10 flex-none">
+        <p class="text-[10px] text-slate-500 tracking-wider">Unopened boxes will remain locked after 3 selections</p>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- FINAL POPUP OVERLAY (MODAL)                  -->
+      <!-- ============================================ -->
+      <div id="final-modal"
+        class="absolute inset-0 w-full h-full glass-panel z-40 flex items-center justify-center p-4 sm:p-6 opacity-0 scale-95 pointer-events-none transition-all duration-700 ease-in-out">
+        <div id="final-modal-card"
+          class="w-full max-w-sm rounded-[28px] bg-gradient-to-b from-purple-950/90 via-slate-900/95 to-slate-950 border border-purple-500/20 p-5 sm:p-6 text-center shadow-2xl flex flex-col items-center justify-between space-y-4 sm:space-y-5 transform translate-y-8 duration-700 max-h-[90%] overflow-y-auto">
+
+          <div class="space-y-2">
+            <!-- Animated Crown icon -->
+            <div
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400 text-2xl sm:text-3xl mx-auto glow-gold animate-bounce">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+
+            <h3 id="render-final-title"
+              class="text-xl sm:text-2xl font-extrabold font-heading text-white tracking-tight mt-3">
+              Best Year Ahead, Anisha!
+            </h3>
+
+            <p id="render-final-wish-label"
+              class="text-[10px] sm:text-xs text-pink-400 font-semibold tracking-widest uppercase font-heading">
+              Hope you have the best year ahead! 💖
+            </p>
+          </div>
+
+          <!-- Inside the popup, display the 3 revealed gifts in miniature -->
+          <div class="space-y-2 w-full">
+            <p class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Your Revealed
+              Gifts</p>
+            <div class="grid grid-cols-3 gap-2 w-full">
+              <div id="final-thumb-wrapper-0"
+                class="flex flex-col items-center gap-1 cursor-pointer hover:scale-105 active:scale-95 transition-all duration-200">
+                <div
+                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border border-amber-400/30 overflow-hidden bg-slate-900">
+                  <img id="reveal-thumb-0" src="" class="w-full h-full object-cover" alt="Thumb">
+                </div>
+                <span id="reveal-title-0" class="text-[8px] font-bold text-slate-300 truncate w-full text-center">Gift
+                  1</span>
+              </div>
+              <div id="final-thumb-wrapper-1"
+                class="flex flex-col items-center gap-1 cursor-pointer hover:scale-105 active:scale-95 transition-all duration-200">
+                <div
+                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border border-amber-400/30 overflow-hidden bg-slate-900">
+                  <img id="reveal-thumb-1" src="" class="w-full h-full object-cover" alt="Thumb">
+                </div>
+                <span id="reveal-title-1" class="text-[8px] font-bold text-slate-300 truncate w-full text-center">Gift
+                  2</span>
+              </div>
+              <div id="final-thumb-wrapper-2"
+                class="flex flex-col items-center gap-1 cursor-pointer hover:scale-105 active:scale-95 transition-all duration-200">
+                <div
+                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border border-amber-400/30 overflow-hidden bg-slate-900">
+                  <img id="reveal-thumb-2" src="" class="w-full h-full object-cover" alt="Thumb">
+                </div>
+                <span id="reveal-title-2" class="text-[8px] font-bold text-slate-300 truncate w-full text-center">Gift
+                  3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sweet final quote card -->
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-4 w-full text-center">
+            <p id="render-final-quote"
+              class="text-xs sm:text-sm text-slate-200 font-cursive leading-relaxed italic text-center w-full">
+              "Some people become so special that they bring happiness, peace, and light into your life without even
+              trying. Thank you for being one of those beautiful people for me, Anisha. Wishing you endless smiles,
+              love, success, and the most wonderful birthday ever. Happy Birthday ✨💖🎂
+              " 🌸
+            </p>
+          </div>
+
+          <!-- Restart button -->
+          <button id="restart-journey"
+            class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl font-bold tracking-wider text-xs active:scale-95 duration-200">
+            RESTART CELEBRATION <i class="fa-solid fa-rotate-left ml-1"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- GIFT PREVIEW OVERLAY (MODAL)                 -->
+      <!-- ============================================ -->
+      <div id="gift-preview-modal"
+        class="absolute inset-0 w-full h-full bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 scale-95 pointer-events-none transition-all duration-500 ease-in-out">
+        <div id="gift-preview-card"
+          class="relative w-full max-w-sm rounded-[28px] bg-gradient-to-b from-purple-950/90 via-slate-900/95 to-slate-950 border border-purple-500/20 p-5 sm:p-6 text-center shadow-2xl flex flex-col items-center justify-between space-y-4 transform translate-y-8 transition-all duration-500 max-h-[90%] overflow-y-auto">
+
+          <!-- Close button -->
+          <button id="close-preview"
+            class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors duration-200 z-10 p-1">
+            <i class="fa-solid fa-xmark text-2xl"></i>
+          </button>
+
+          <div class="space-y-4 w-full">
+            <span
+              class="inline-block px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-semibold text-amber-400 tracking-widest uppercase">Gift
+              Preview</span>
+
+            <!-- Large image container -->
+            <div
+              class="w-full aspect-square rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-900 shadow-lg relative mx-auto max-w-[200px] sm:max-w-[240px]">
+              <img id="preview-image"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                class="w-full h-full object-cover" alt="Gift Preview">
+            </div>
+
+            <!-- Content (Title, Description) -->
+            <div class="space-y-1 w-full text-center">
+              <h3 id="preview-title" class="text-lg sm:text-xl font-extrabold font-heading text-white tracking-tight">
+                Gift Title</h3>
+              <p id="preview-desc" class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">Gift Description
+              </p>
+            </div>
+          </div>
+
+          <!-- Product link button -->
+          <div class="w-full pt-2">
+            <a id="preview-link" href="#" target="_blank"
+              class="block w-full py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-extrabold tracking-wider text-xs rounded-xl active:scale-95 duration-200 transition-all text-center glow-gold">
+              VIEW PRODUCT <i class="fa-solid fa-arrow-up-right-from-square ml-1.5"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ============================================ -->
+  <!-- VANILLA JAVASCRIPT GAMEPLAY CONTROLS        -->
+  <!-- ============================================ -->
+  <script>
+    // =========================================================================
+    // ✨ BIRTHDAY PAGE CUSTOMIZATION CONFIGURATION ✨
+    // Edit these variables directly in your code editor to personalize the website!
+    // You can upload your custom photos to the "assets" folder in this directory,
+    // and then change the image paths below (e.g., "assets/memory1.jpg").
+    // =========================================================================
+
+    const CONFIG = {
+      // The birthday person's full name (used on Screen 1 and document title)
+      birthdayName: "Anisha Mallick",
+
+      // Screen 1: Entrance Screen config
+      introTitle: "Happy Birthday",
+      introSubtitle: "A Special Journey For",
+      introDesc: "Step into a little world designed just for you. Tap anywhere to enter.",
+
+      // Screen 4 & Modal: Final Popup Wish and Quote config
+      finalTitle: "Best Year Ahead, Anisha!",
+      finalWishLabel: "Hope you have the best year ahead! 💖",
+      finalQuote: `"Some people become so special that they bring happiness, peace, and light into your life without even trying. Thank you for being one of those beautiful people for me, Anisha. Wishing you endless smiles, love, success, and the most wonderful birthday ever. Happy Birthday ✨💖🎂" 🌸`
+    };
+
+    const FALLBACK_MEMORIES = [
+      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&h=800&q=80",
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&h=800&q=80",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&h=800&q=80",
+      "https://images.unsplash.com/photo-1496843916299-fc090274e6a0?auto=format&fit=crop&w=600&h=800&q=80"
+    ];
+
+    const FALLBACK_GIFTS = [
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&h=500&q=80",
+      "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=500&h=500&q=80",
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=500&h=500&q=80"
+    ];
+
+    const MEMORIES = [
+      // Memory 1
+      {
+        id: 1,
+        // Swap this URL with your custom photo for Memory 1 (supports online links or local paths like 'assets/memory1.jpg')
+        image: "assets/memory1.jpeg",
+        // The title/header written in cursive under the photo
+        speaker: "Draped in elegance, glowing like a festive dream ✨🌸",
+        // The wish/caption that appears in the box when cycling to this photo
+        text: "Wishing your life always stays as colorful, graceful, and beautiful as this festive moment ✨🌸💖"
+      },
+      // Memory 2
+      {
+        id: 2,
+        image: "assets/memory2.jpeg",
+        speaker: "Soft smile, pink vibes, and peaceful hearts 💖🌿",
+        text: "May your sweet smile and peaceful heart always shine brighter with happiness every day 😊🌿💕"
+      },
+      // Memory 3
+      {
+        id: 3,
+        image: "assets/memory3.jpeg",
+        speaker: "Simple look, graceful charm, endless beauty 🌺🖤",
+        text: "Wishing you endless confidence, success, and beautiful memories in every step of life 🖤🌺✨"
+      },
+      // Memory 4
+      {
+        id: 4,
+        image: "assets/memory4.jpeg",
+        speaker: "Beauty that shines brighter than the camera flash ✨❤️",
+        text: "May your elegance, charm, and beautiful smile always light up every place you go ❤️✨🌷"
+      },
+      // Memory 5
+      {
+        id: 5,
+        image: "assets/memory5.jpg",
+        speaker: "Sun-kissed glow and carefree laughter ☀️💛",
+        text: "May your days be filled with warmth, bright moments, and reasons to laugh without a worry in the world ☀️💛✨"
+      },
+      // Memory 6
+      {
+        id: 6,
+        image: "assets/memory6.jpg",
+        speaker: "Capturing sweet glances and quiet confidence 🌸💫",
+        text: "Wishing you the courage to follow your dreams and the peace of knowing how special you are 🌸💫💖"
+      },
+      // Memory 7
+      {
+        id: 7,
+        image: "assets/memory7.jpg",
+        speaker: "A touch of grace in a world full of noise 🍃✨",
+        text: "May you always find harmony, joy, and the beauty of being true to yourself in everything you do 🍃✨🌿"
+      },
+      // Memory 8
+      {
+        id: 8,
+        image: "assets/memory8.jpg",
+        speaker: "Dazzling look, gorgeous style, unforgettable presence 💫🖤",
+        text: "May your path ahead be filled with sparkling opportunities and moments that leave you smiling forever 💫🖤✨"
+      },
+      // Memory 9
+      {
+        id: 9,
+        image: "assets/memory9.jpg",
+        speaker: "Radiant energy and matching vibes 🌟✨",
+        text: "Wishing you endless laughter, true friends, and adventures that make your heart sing with happiness 🌟✨💕"
+      },
+      // Memory 10
+      {
+        id: 10,
+        image: "assets/memory10.jpg",
+        speaker: "Golden hour charm and pure happiness 🌅💛",
+        text: "May this birthday mark the beginning of your most beautiful, peaceful, and successful chapter yet 🌅💛👑"
+      }
+    ];
+
+    const GIFTS = [
+      // Gift 1
+      {
+        id: 1,
+        // Swap this URL with your custom photo for Gift 1 (supports online links or local paths like 'assets/gift1.jpg')
+        image: "assets/gift1.jpeg",
+        title: "Soft Toy(Like Sunflower)🌻",
+        desc: "A sparkling token of eternal friendship.",
+        link: "https://www.meesho.com/s/p/9ws00v?utm_source=s_cc" // Add your product link here (e.g. "https://amazon.com/...")
+      },
+      // Gift 2
+      {
+        id: 2,
+        // Swap this URL with your custom photo for Gift 2 (supports online links or local paths like 'assets/gift2.jpg')
+        image: "assets/gift2.jpeg",
+        title: "Kurta with Pants📸",
+        desc: "To create million more fun memories.",
+        link: "https://www.meesho.com/s/p/8wlylt?utm_source=s_cc" // Add your product link here!
+      },
+      // Gift 3
+      {
+        id: 3,
+        // Swap this URL with your custom photo for Gift 3 (supports online links or local paths like 'assets/gift3.jpg')
+        image: "assets/gift3.jpeg",
+        title: "Kurti🥻",
+        desc: "A gift as elegant and classy as you.",
+        link: "https://ajioapps.onelink.me/ybtf/9ruv11fe" // Add your product link here!
+      }
+    ];
+
+    // --- APPLICATION DATA & INITIALIZATION ---
+    let memoryCaptions = [];
+
+    function initAppData() {
+      // Set static text configurations
+      const name = CONFIG.birthdayName;
+      document.getElementById('render-intro-name').innerText = name;
+      document.getElementById('render-intro-subtitle').innerText = CONFIG.introSubtitle;
+      document.getElementById('render-intro-title').innerText = CONFIG.introTitle;
+      document.getElementById('render-intro-desc').innerText = CONFIG.introDesc;
+      if (!document.title || document.title === "Happy Birthday Anisha Mallick!") {
+        document.title = `Happy Birthday ${name}!`;
+      }
+
+      // Set final modal configurations
+      // Dynamically replace "Anisha" with the configured name if customized
+      const firstName = name.split(' ')[0];
+      const finalTitle = CONFIG.finalTitle.replace(/Anisha/g, firstName);
+      const finalWishLabel = CONFIG.finalWishLabel.replace(/Anisha/g, firstName);
+      const finalQuote = CONFIG.finalQuote.replace(/Anisha/g, firstName);
+
+      document.getElementById('render-final-title').innerText = finalTitle;
+      document.getElementById('render-final-wish-label').innerText = finalWishLabel;
+      document.getElementById('render-final-quote').innerText = finalQuote;
+
+      // Map memory captions in reverse for stack cycling sequence
+      memoryCaptions = MEMORIES.map(m => ({
+        speaker: m.speaker,
+        text: m.text
+      })).reverse();
+
+      // Set background music volume to 35%
+      const bgMusic = document.getElementById('bg-music');
+      if (bgMusic) {
+        bgMusic.volume = 0.25;
+      }
+
+      // Render the polaroid memory deck cards dynamically
+      initMemoriesDeck();
+    }
+
+    // --- AUDIO SYNTHESIS SYSTEM (Web Audio API) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let isMuted = false;
+
+    window.addEventListener('click', () => {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const bgMusic = document.getElementById('bg-music');
+      if (bgMusic && bgMusic.paused) {
+        bgMusic.play().catch(err => console.log('Background music autoplay blocked:', err));
+      }
+    }, { once: true });
+
+    function playTone(frequency, type = 'sine', duration = 0.3, gainVal = 0.15) {
+      if (isMuted) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+        gainNode.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (err) {
+        console.error('Audio synthesis failed:', err);
+      }
+    }
+
+    function playBlowOutSound() {
+      if (isMuted) return;
+      try {
+        const bufferSize = audioCtx.sampleRate * 0.2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(900, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.18);
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+
+        noise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.2);
+      } catch (err) {
+        console.error('Noise synthesis failed:', err);
+      }
+    }
+
+    function playSparkleSound() {
+      if (isMuted) return;
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+
+      notes.forEach((freq, index) => {
+        setTimeout(() => {
+          if (isMuted) return;
+          try {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+          } catch (e) { }
+        }, index * 80);
+      });
+    }
+
+    // --- SCREEN NAVIGATION SYSTEM ---
+    function transitionTo(fromId, toId) {
+      const from = document.getElementById(fromId);
+      const to = document.getElementById(toId);
+
+      from.classList.remove('active-screen');
+      from.classList.add('exit-screen');
+
+      to.classList.remove('hidden-screen');
+      setTimeout(() => {
+        to.classList.add('active-screen');
+      }, 50);
+
+      setTimeout(() => {
+        from.classList.remove('exit-screen');
+        from.classList.add('hidden-screen');
+      }, 800);
+
+      if (toId === 'screen-2') {
+        setupScreen2();
+      } else if (toId === 'screen-3') {
+        setupScreen3();
+      } else if (toId === 'screen-4') {
+        setupScreen4();
+      }
+    }
+
+    // --- SCREEN 1: ENTRANCE LOGIC ---
+    function setupScreen1() {
+      const container = document.getElementById('particles-container');
+      container.innerHTML = '';
+
+      const symbols = ['🎈', '✨', '💖', '🧁', '⭐', '🌸', '🎉', '🌟', '🦄', '🎀', '🎂', '🥳', '🎁', '🍬', '🍩', '🍪', '🍨', '🧸', '🌈', '🧚‍♀️', '✨', '💕', '💌', '👑'];
+      const density = 36;
+
+      for (let i = 0; i < density; i++) {
+        const particle = document.createElement('div');
+        particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        particle.className = 'falling-particle select-none pointer-events-none opacity-0 text-2xl';
+
+        const xPos = Math.random() * 100;
+        const duration = 4.5 + Math.random() * 5;
+        const delay = Math.random() * 3.5;
+        const scale = 14 + Math.random() * 22;
+        const drift = (Math.random() * 120 - 60) + 'px';
+        const rot = (Math.random() * 360) + 'deg';
+
+        particle.style.left = `${xPos}%`;
+        particle.style.fontSize = `${scale}px`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.setProperty('--drift', drift);
+        particle.style.setProperty('--rot', rot);
+
+        container.appendChild(particle);
+      }
+
+      const progress = document.getElementById('intro-progress');
+      progress.style.width = '0%';
+      progress.offsetHeight; // force repaint
+      progress.style.transitionDuration = '3500ms';
+      progress.style.width = '100%';
+
+      const autoTimer = setTimeout(() => {
+        transitionTo('screen-1', 'screen-2');
+      }, 3600);
+
+      const screen1 = document.getElementById('screen-1');
+      const skipIntro = () => {
+        clearTimeout(autoTimer);
+        transitionTo('screen-1', 'screen-2');
+        screen1.removeEventListener('click', skipIntro);
+      };
+      screen1.addEventListener('click', skipIntro);
+    }
+
+
+    // --- SCREEN 2: CAKE & CANDLES LOGIC ---
+    let candlesBlownCount = 0;
+    const totalCandles = 3;
+    let screen2Completed = false;
+
+    function setupScreen2() {
+      candlesBlownCount = 0;
+      screen2Completed = false;
+      document.getElementById('candle-status').innerText = 'Make a wish and blow out the candles!';
+      document.getElementById('candle-status').className = 'text-xs text-pink-400 font-semibold tracking-widest uppercase py-4';
+
+      document.querySelectorAll('.candle').forEach(c => {
+        c.classList.remove('blown');
+        const flame = c.querySelector('.flame-wrapper');
+        if (flame) {
+          flame.style.opacity = '1';
+          flame.style.transform = 'scale(1)';
+          flame.style.pointerEvents = 'auto';
+        }
+      });
+    }
+
+    document.querySelectorAll('.candle').forEach(candle => {
+      candle.addEventListener('click', function (e) {
+        if (this.classList.contains('blown') || screen2Completed) return;
+
+        this.classList.add('blown');
+        candlesBlownCount++;
+
+        playBlowOutSound();
+        const flameWrapper = this.querySelector('.flame-wrapper');
+        if (flameWrapper) {
+          flameWrapper.style.opacity = '0';
+          flameWrapper.style.transform = 'scale(0)';
+          flameWrapper.style.pointerEvents = 'none';
+
+          const rect = flameWrapper.getBoundingClientRect();
+          const containerRect = document.getElementById('screen-2').getBoundingClientRect();
+          const puffX = rect.left - containerRect.left;
+          const puffY = rect.top - containerRect.top;
+          createSmokePuff(puffX, puffY);
+
+          confetti({
+            particleCount: 15,
+            spread: 45,
+            origin: {
+              x: (rect.left + rect.width / 2) / window.innerWidth,
+              y: (rect.top + rect.height / 2) / window.innerHeight
+            },
+            colors: ['#cbd5e1', '#f1f5f9', '#fbcfe8']
+          });
+        }
+
+        if (candlesBlownCount < totalCandles) {
+          document.getElementById('candle-status').innerText = `${totalCandles - candlesBlownCount} candles remaining...`;
+        } else {
+          screen2Completed = true;
+          document.getElementById('candle-status').innerText = 'Wish Made! 💖';
+          document.getElementById('candle-status').className = 'text-xs text-amber-400 font-bold tracking-widest uppercase py-4';
+
+          playTone(440, 'sine', 0.2, 0.15);
+          setTimeout(() => playTone(880, 'sine', 0.4, 0.2), 150);
+
+          setTimeout(() => {
+            confetti({
+              particleCount: 120,
+              spread: 80,
+              origin: { y: 0.65 }
+            });
+          }, 300);
+
+          setTimeout(() => {
+            transitionTo('screen-2', 'screen-3');
+          }, 1800);
+        }
+      });
+    });
+
+    function createSmokePuff(x, y) {
+      const parent = document.getElementById('screen-2');
+      const puff = document.createElement('div');
+      puff.className = 'absolute w-5 h-5 bg-white/30 rounded-full filter blur-[2px] pointer-events-none smoke-puff z-30';
+      puff.style.left = `${x}px`;
+      puff.style.top = `${y}px`;
+      parent.appendChild(puff);
+
+      setTimeout(() => {
+        puff.remove();
+      }, 950);
+    }
+
+
+    // --- SCREEN 3: MEMORIES LOGIC ---
+    let activeCardIndex = 0;
+    let isCycling = false;
+    let cards = [];
+    const captionText = document.getElementById('memory-caption');
+    const speakerText = document.getElementById('memory-speaker');
+
+    function setupScreen3() {
+      activeCardIndex = 0;
+      isCycling = false;
+      updateCardStack();
+      updateCaption();
+    }
+
+    function initMemoriesDeck() {
+      const deck = document.getElementById('polaroid-deck');
+      deck.innerHTML = '';
+      const cardColors = ['text-rose-600', 'text-violet-600', 'text-emerald-600', 'text-amber-600'];
+
+      MEMORIES.forEach((mem, index) => {
+        const card = document.createElement('div');
+        card.className = `polaroid-card cursor-pointer select-none bg-white p-3 pb-7 shadow-[0_15px_30px_rgba(0,0,0,0.6)] rounded-lg text-slate-800 border border-slate-100`;
+
+        card.innerHTML = `
+          <div class="w-full h-[220px] sm:h-[250px] bg-slate-100 rounded-sm overflow-hidden relative border border-slate-200 pointer-events-none">
+            <img src="${mem.image}" onerror="this.onerror=null; this.src=FALLBACK_MEMORIES[${index} % FALLBACK_MEMORIES.length];" class="w-full h-full object-cover" alt="${mem.speaker}">
+          </div>
+          <div class="mt-2.5 sm:mt-3 text-center text-lg sm:text-xl font-bold font-cursive ${cardColors[index % cardColors.length]} tracking-wide pointer-events-none">
+            ${mem.speaker}
+          </div>
+        `;
+        deck.appendChild(card);
+      });
+
+      cards = Array.from(document.querySelectorAll('.polaroid-card'));
+      cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+          if (index !== (cards.length - 1 - activeCardIndex)) return;
+          cycleCard();
+        });
+      });
+    }
+
+    function cycleCard() {
+      if (isCycling) return;
+      isCycling = true;
+      setTimeout(() => { isCycling = false; }, 600);
+
+      playTone(150, 'triangle', 0.15, 0.1);
+
+      const topCardIdx = cards.length - 1 - activeCardIndex;
+      const topCard = cards[topCardIdx];
+
+      topCard.style.transform = 'translateX(280px) rotate(18deg) scale(0.9)';
+      topCard.style.opacity = '0';
+
+      activeCardIndex = (activeCardIndex + 1) % cards.length;
+
+      updateCaption();
+
+      setTimeout(() => {
+        updateCardStack();
+      }, 350);
+    }
+
+    // Helper to wire up config items
+    function updateCaption() {
+      captionText.style.opacity = '0';
+      speakerText.style.opacity = '0';
+
+      setTimeout(() => {
+        if (memoryCaptions.length > 0) {
+          const item = memoryCaptions[activeCardIndex];
+          speakerText.innerText = item.speaker;
+          captionText.innerText = item.text;
+        }
+        captionText.style.opacity = '1';
+        speakerText.style.opacity = '1';
+      }, 200);
+    }
+
+    function updateCardStack() {
+      for (let i = 0; i < cards.length; i++) {
+        const logicalIndex = (i + activeCardIndex) % cards.length;
+        const stackPos = cards.length - 1 - logicalIndex;
+
+        const card = cards[i];
+        const rotations = [-2, 3, -1, 2];
+        const rot = rotations[i % rotations.length];
+
+        const scale = 1 - (stackPos * 0.02);
+        const yOffset = stackPos * 8;
+
+        card.style.opacity = '1';
+        card.style.zIndex = (cards.length - stackPos).toString();
+        card.style.transform = `translateY(${yOffset}px) rotate(${rot}deg) scale(${scale})`;
+      }
+    }
+
+    document.getElementById('go-to-gifts').addEventListener('click', () => {
+      transitionTo('screen-3', 'screen-4');
+    });
+
+
+    // --- SCREEN 4: GIFT GAME LOGIC ---
+    let giftsOpenedCount = 0;
+    const maxGiftsAllowed = 3;
+    let shuffledGifts = [];
+
+    function setupScreen4() {
+      giftsOpenedCount = 0;
+      document.getElementById('gifts-left').innerText = maxGiftsAllowed.toString();
+
+      // Randomly shuffle the 3 uploaded/configured gifts
+      shuffledGifts = [...GIFTS].sort(() => Math.random() - 0.5);
+
+      const modal = document.getElementById('final-modal');
+      modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+      modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+      const card = document.getElementById('final-modal-card');
+      if (card) card.classList.add('translate-y-8');
+
+      const previewModal = document.getElementById('gift-preview-modal');
+      if (previewModal) {
+        previewModal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+        previewModal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        const previewCard = document.getElementById('gift-preview-card');
+        if (previewCard) previewCard.classList.add('translate-y-8');
+      }
+
+      // Clear final modal thumbnails and titles to prevent flash of old state on restart
+      for (let i = 0; i < maxGiftsAllowed; i++) {
+        const thumb = document.getElementById(`reveal-thumb-${i}`);
+        const label = document.getElementById(`reveal-title-${i}`);
+        if (thumb) thumb.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        if (label) label.innerText = `Gift ${i + 1}`;
+      }
+
+      document.querySelectorAll('.gift-box-container').forEach(container => {
+        container.style.opacity = '1';
+        container.style.pointerEvents = 'auto';
+        container.style.transition = '';
+        delete container.dataset.revealing;
+        delete container.dataset.giftId;
+
+        const box = container.querySelector('.gift-box');
+        box.classList.remove('scale-0', 'opacity-0', 'pointer-events-none', 'shake-box');
+
+        const revealed = container.querySelector('.gift-revealed');
+        revealed.classList.remove('scale-100', 'opacity-100');
+        revealed.classList.add('scale-0', 'opacity-0');
+        const img = revealed.querySelector('img');
+        if (img) img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+      });
+    }
+
+    document.querySelectorAll('.gift-box-container').forEach(container => {
+      const box = container.querySelector('.gift-box');
+
+      box.addEventListener('click', function () {
+        if (giftsOpenedCount >= maxGiftsAllowed || this.classList.contains('pointer-events-none') || this.parentElement.dataset.revealing === "true") return;
+
+        const parent = this.parentElement;
+        parent.dataset.revealing = "true";
+        this.classList.add('pointer-events-none');
+
+        const giftItem = shuffledGifts[giftsOpenedCount];
+        const currentGiftIndex = giftsOpenedCount;
+        giftsOpenedCount++;
+
+        // Update gifts left text immediately to avoid UI lag/confusion
+        document.getElementById('gifts-left').innerText = (maxGiftsAllowed - giftsOpenedCount).toString();
+
+        // If we reached the max, make all unopened boxes unclickable immediately to prevent race conditions
+        if (giftsOpenedCount === maxGiftsAllowed) {
+          document.querySelectorAll('.gift-box-container').forEach(c => {
+            const unopenedBox = c.querySelector('.gift-box');
+            if (unopenedBox && !unopenedBox.classList.contains('pointer-events-none')) {
+              unopenedBox.classList.add('pointer-events-none');
+              c.style.transition = 'all 0.5s';
+              c.style.opacity = '0.35';
+              c.style.pointerEvents = 'none';
+            }
+          });
+        }
+
+        playTone(300, 'triangle', 0.15, 0.2);
+        this.classList.add('shake-box');
+
+        setTimeout(() => {
+          const img = parent.querySelector('.gift-revealed img');
+          const title = parent.querySelector('.gift-title');
+
+          img.onerror = function () {
+            this.onerror = null;
+            this.src = FALLBACK_GIFTS[giftItem.id - 1] || FALLBACK_GIFTS[0];
+          };
+          img.src = giftItem.image;
+          title.innerText = giftItem.title;
+
+          parent.dataset.giftId = giftItem.id; // Store gift ID for previewing!
+
+          this.classList.add('scale-0', 'opacity-0');
+
+          const revealed = parent.querySelector('.gift-revealed');
+          revealed.classList.remove('scale-0', 'opacity-0');
+          revealed.classList.add('scale-100', 'opacity-100');
+
+          playSparkleSound();
+          const rect = revealed.getBoundingClientRect();
+          confetti({
+            particleCount: 30,
+            spread: 50,
+            origin: {
+              x: (rect.left + rect.width / 2) / window.innerWidth,
+              y: (rect.top + rect.height / 2) / window.innerHeight
+            }
+          });
+
+          // Set thumbnail inside modal
+          const thumb = document.getElementById(`reveal-thumb-${currentGiftIndex}`);
+          const label = document.getElementById(`reveal-title-${currentGiftIndex}`);
+          if (thumb && label) {
+            thumb.onerror = function () {
+              this.onerror = null;
+              this.src = FALLBACK_GIFTS[giftItem.id - 1] || FALLBACK_GIFTS[0];
+            };
+            thumb.src = giftItem.image;
+            label.innerText = giftItem.title;
+          }
+
+          if (giftsOpenedCount === maxGiftsAllowed) {
+            setTimeout(() => {
+              if (!isMuted) {
+                setTimeout(() => playTone(523.25, 'sine', 0.25, 0.15), 0);
+                setTimeout(() => playTone(659.25, 'sine', 0.25, 0.15), 100);
+                setTimeout(() => playTone(783.99, 'sine', 0.25, 0.15), 200);
+                setTimeout(() => playTone(1046.50, 'sine', 0.6, 0.2), 300);
+              }
+
+              confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 }
+              });
+
+              const modal = document.getElementById('final-modal');
+              modal.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+              modal.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+              const card = document.getElementById('final-modal-card');
+              if (card) card.classList.remove('translate-y-8');
+            }, 1800);
+          }
+        }, 500);
+      });
+
+      const revealed = container.querySelector('.gift-revealed');
+      revealed.addEventListener('click', function () {
+        const giftId = container.dataset.giftId;
+        if (giftId) {
+          const giftItem = GIFTS.find(g => g.id == giftId);
+          if (giftItem) {
+            openGiftPreview(giftItem);
+          }
+        }
+      });
+    });
+
+    // --- GIFT PREVIEW LOGIC ---
+    function openGiftPreview(giftItem) {
+      const modal = document.getElementById('gift-preview-modal');
+      const img = document.getElementById('preview-image');
+      const title = document.getElementById('preview-title');
+      const desc = document.getElementById('preview-desc');
+      const link = document.getElementById('preview-link');
+
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = FALLBACK_GIFTS[giftItem.id - 1] || FALLBACK_GIFTS[0];
+      };
+      img.src = giftItem.image;
+      title.innerText = giftItem.title;
+      desc.innerText = giftItem.desc;
+
+      if (giftItem.link) {
+        link.href = giftItem.link;
+      } else {
+        link.href = '#';
+      }
+
+      playTone(600, 'sine', 0.15, 0.15);
+
+      modal.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+      modal.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+
+      const card = document.getElementById('gift-preview-card');
+      if (card) card.classList.remove('translate-y-8');
+    }
+
+    function closeGiftPreview() {
+      const modal = document.getElementById('gift-preview-modal');
+      modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+      modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+
+      const card = document.getElementById('gift-preview-card');
+      if (card) card.classList.add('translate-y-8');
+
+      playTone(200, 'sine', 0.1, 0.1);
+    }
+
+    // Attach click listeners to final congratulations thumbnails for preview
+    for (let i = 0; i < maxGiftsAllowed; i++) {
+      const wrapper = document.getElementById(`final-thumb-wrapper-${i}`);
+      if (wrapper) {
+        wrapper.addEventListener('click', () => {
+          if (shuffledGifts[i]) {
+            openGiftPreview(shuffledGifts[i]);
+          }
+        });
+      }
+    }
+
+    // Close preview button and backdrop click logic
+    document.getElementById('close-preview').addEventListener('click', closeGiftPreview);
+    document.getElementById('gift-preview-modal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeGiftPreview();
+      }
+    });
+
+    document.getElementById('restart-journey').addEventListener('click', () => {
+      // Hide final modal elements immediately for a clean transition back
+      const modal = document.getElementById('final-modal');
+      modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+      modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+      const card = document.getElementById('final-modal-card');
+      if (card) card.classList.add('translate-y-8');
+
+      transitionTo('screen-4', 'screen-1');
+      setTimeout(() => {
+        setupScreen1();
+      }, 850);
+    });
+
+    // Trigger loading on window startup
+    window.addEventListener('DOMContentLoaded', () => {
+      initAppData();
+      setupScreen1();
+    });
+
+  </script>
+</body>
+
+</html>
